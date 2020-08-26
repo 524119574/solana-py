@@ -56,7 +56,7 @@
 <span class="sd">&quot;&quot;&quot;Constant for standard length of a signature.&quot;&quot;&quot;</span>
 
 
-<div class="viewcode-block" id="AccountMeta"><a class="viewcode-back" href="../../index.html#solana.transaction.AccountMeta">[docs]</a><span class="nd">@dataclass</span>
+<div class="viewcode-block" id="AccountMeta"><a class="viewcode-back" href="../../solana.html#solana.transaction.AccountMeta">[docs]</a><span class="nd">@dataclass</span>
 <span class="k">class</span> <span class="nc">AccountMeta</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Account metadata dataclass.&quot;&quot;&quot;</span>
 
@@ -68,7 +68,7 @@
     <span class="sd">&quot;&quot;&quot;True if the `pubkey` can be loaded as a read-write account.&quot;&quot;&quot;</span></div>
 
 
-<div class="viewcode-block" id="TransactionInstruction"><a class="viewcode-back" href="../../index.html#solana.transaction.TransactionInstruction">[docs]</a><span class="k">class</span> <span class="nc">TransactionInstruction</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
+<div class="viewcode-block" id="TransactionInstruction"><a class="viewcode-back" href="../../solana.html#solana.transaction.TransactionInstruction">[docs]</a><span class="k">class</span> <span class="nc">TransactionInstruction</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Transaction Instruction class.&quot;&quot;&quot;</span>
 
     <span class="n">keys</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">AccountMeta</span><span class="p">]</span>
@@ -81,7 +81,7 @@
     <span class="sd">&quot;&quot;&quot;Program Id to execute.&quot;&quot;&quot;</span></div>
 
 
-<div class="viewcode-block" id="NonceInformation"><a class="viewcode-back" href="../../index.html#solana.transaction.NonceInformation">[docs]</a><span class="k">class</span> <span class="nc">NonceInformation</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
+<div class="viewcode-block" id="NonceInformation"><a class="viewcode-back" href="../../solana.html#solana.transaction.NonceInformation">[docs]</a><span class="k">class</span> <span class="nc">NonceInformation</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;NonceInformation to be used to build a Transaction.&quot;&quot;&quot;</span>
 
     <span class="n">nonce</span><span class="p">:</span> <span class="n">Blockhash</span>
@@ -96,7 +96,7 @@
     <span class="n">signature</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bytes</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
 
 
-<div class="viewcode-block" id="Transaction"><a class="viewcode-back" href="../../index.html#solana.transaction.Transaction">[docs]</a><span class="k">class</span> <span class="nc">Transaction</span><span class="p">:</span>
+<div class="viewcode-block" id="Transaction"><a class="viewcode-back" href="../../solana.html#solana.transaction.Transaction">[docs]</a><span class="k">class</span> <span class="nc">Transaction</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Transaction class to represent an atomic transaction.&quot;&quot;&quot;</span>
 
     <span class="c1"># Default (empty) signature</span>
@@ -124,11 +124,11 @@
             <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">instructions</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">instructions</span>
         <span class="p">)</span>
 
-<div class="viewcode-block" id="Transaction.signature"><a class="viewcode-back" href="../../index.html#solana.transaction.Transaction.signature">[docs]</a>    <span class="k">def</span> <span class="nf">signature</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bytes</span><span class="p">]:</span>
+<div class="viewcode-block" id="Transaction.signature"><a class="viewcode-back" href="../../solana.html#solana.transaction.Transaction.signature">[docs]</a>    <span class="k">def</span> <span class="nf">signature</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bytes</span><span class="p">]:</span>
         <span class="sd">&quot;&quot;&quot;The first (payer) Transaction signature.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="kc">None</span> <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">signatures</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">signatures</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">signature</span></div>
 
-<div class="viewcode-block" id="Transaction.add"><a class="viewcode-back" href="../../index.html#solana.transaction.Transaction.add">[docs]</a>    <span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Transaction</span><span class="p">,</span> <span class="n">TransactionInstruction</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Transaction</span><span class="p">:</span>
+<div class="viewcode-block" id="Transaction.add"><a class="viewcode-back" href="../../solana.html#solana.transaction.Transaction.add">[docs]</a>    <span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Transaction</span><span class="p">,</span> <span class="n">TransactionInstruction</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Transaction</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Add one or more instructions to this Transaction.&quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">arg</span> <span class="ow">in</span> <span class="n">args</span><span class="p">:</span>
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="n">Transaction</span><span class="p">):</span>
@@ -140,7 +140,7 @@
 
         <span class="k">return</span> <span class="bp">self</span></div>
 
-<div class="viewcode-block" id="Transaction.compile_message"><a class="viewcode-back" href="../../index.html#solana.transaction.Transaction.compile_message">[docs]</a>    <span class="k">def</span> <span class="nf">compile_message</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Message</span><span class="p">:</span>
+<div class="viewcode-block" id="Transaction.compile_message"><a class="viewcode-back" href="../../solana.html#solana.transaction.Transaction.compile_message">[docs]</a>    <span class="k">def</span> <span class="nf">compile_message</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Message</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Compile transaction data.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">nonce_info</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">instructions</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">nonce_info</span><span class="o">.</span><span class="n">nonce_instruction</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">recent_blockhash</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">nonce_info</span><span class="o">.</span><span class="n">nonce</span>
@@ -228,11 +228,11 @@
             <span class="p">)</span>
         <span class="p">)</span></div>
 
-<div class="viewcode-block" id="Transaction.serialize_message"><a class="viewcode-back" href="../../index.html#solana.transaction.Transaction.serialize_message">[docs]</a>    <span class="k">def</span> <span class="nf">serialize_message</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bytes</span><span class="p">:</span>
+<div class="viewcode-block" id="Transaction.serialize_message"><a class="viewcode-back" href="../../solana.html#solana.transaction.Transaction.serialize_message">[docs]</a>    <span class="k">def</span> <span class="nf">serialize_message</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bytes</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Get raw transaction data that need to be covered by signatures.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">compile_message</span><span class="p">()</span><span class="o">.</span><span class="n">serialize</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="Transaction.sign_partial"><a class="viewcode-back" href="../../index.html#solana.transaction.Transaction.sign_partial">[docs]</a>    <span class="k">def</span> <span class="nf">sign_partial</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">partial_signers</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">PublicKey</span><span class="p">,</span> <span class="n">Account</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<div class="viewcode-block" id="Transaction.sign_partial"><a class="viewcode-back" href="../../solana.html#solana.transaction.Transaction.sign_partial">[docs]</a>    <span class="k">def</span> <span class="nf">sign_partial</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">partial_signers</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">PublicKey</span><span class="p">,</span> <span class="n">Account</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Partially sign a Transaction with the specified accounts.</span>
 
 <span class="sd">        The `Account` inputs will be used to sign the Transaction immediately, while any</span>
@@ -258,7 +258,7 @@
                     <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;signature has invalid length&quot;</span><span class="p">,</span> <span class="n">sig</span><span class="p">)</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">signatures</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">signature</span> <span class="o">=</span> <span class="n">sig</span></div>
 
-<div class="viewcode-block" id="Transaction.sign"><a class="viewcode-back" href="../../index.html#solana.transaction.Transaction.sign">[docs]</a>    <span class="k">def</span> <span class="nf">sign</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">signers</span><span class="p">:</span> <span class="n">Account</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<div class="viewcode-block" id="Transaction.sign"><a class="viewcode-back" href="../../solana.html#solana.transaction.Transaction.sign">[docs]</a>    <span class="k">def</span> <span class="nf">sign</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">signers</span><span class="p">:</span> <span class="n">Account</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Sign the Transaction with the specified accounts.</span>
 
 <span class="sd">        Multiple signatures may be applied to a Transaction. The first signature</span>
@@ -272,7 +272,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sign_partial</span><span class="p">(</span><span class="o">*</span><span class="n">signers</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Transaction.add_signature"><a class="viewcode-back" href="../../index.html#solana.transaction.Transaction.add_signature">[docs]</a>    <span class="k">def</span> <span class="nf">add_signature</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pubkey</span><span class="p">:</span> <span class="n">PublicKey</span><span class="p">,</span> <span class="n">signature</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<div class="viewcode-block" id="Transaction.add_signature"><a class="viewcode-back" href="../../solana.html#solana.transaction.Transaction.add_signature">[docs]</a>    <span class="k">def</span> <span class="nf">add_signature</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pubkey</span><span class="p">:</span> <span class="n">PublicKey</span><span class="p">,</span> <span class="n">signature</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Add an externally created signature to a transaction.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">signature</span><span class="p">)</span> <span class="o">!=</span> <span class="n">SIG_LENGTH</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;signature has invalid length&quot;</span><span class="p">,</span> <span class="n">signature</span><span class="p">)</span>
@@ -281,7 +281,7 @@
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;unknown signer: &quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">pubkey</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">signatures</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">signature</span> <span class="o">=</span> <span class="n">signature</span></div>
 
-<div class="viewcode-block" id="Transaction.add_signer"><a class="viewcode-back" href="../../index.html#solana.transaction.Transaction.add_signer">[docs]</a>    <span class="k">def</span> <span class="nf">add_signer</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">signer</span><span class="p">:</span> <span class="n">Account</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<div class="viewcode-block" id="Transaction.add_signer"><a class="viewcode-back" href="../../solana.html#solana.transaction.Transaction.add_signer">[docs]</a>    <span class="k">def</span> <span class="nf">add_signer</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">signer</span><span class="p">:</span> <span class="n">Account</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Fill in a signature for a partially signed Transaction.</span>
 
 <span class="sd">        The `signer` must be the corresponding `Account` for a `PublicKey` that was</span>
@@ -300,7 +300,7 @@
                 <span class="k">return</span> <span class="kc">False</span>
         <span class="k">return</span> <span class="kc">True</span>
 
-<div class="viewcode-block" id="Transaction.serialize"><a class="viewcode-back" href="../../index.html#solana.transaction.Transaction.serialize">[docs]</a>    <span class="k">def</span> <span class="nf">serialize</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bytes</span><span class="p">:</span>
+<div class="viewcode-block" id="Transaction.serialize"><a class="viewcode-back" href="../../solana.html#solana.transaction.Transaction.serialize">[docs]</a>    <span class="k">def</span> <span class="nf">serialize</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bytes</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Serialize the Transaction in the wire format.</span>
 
 <span class="sd">        The Transaction must have a valid `signature` before invoking this method.</span>
@@ -347,7 +347,7 @@
 
         <span class="k">return</span> <span class="nb">bytes</span><span class="p">(</span><span class="n">wire_transaction</span><span class="p">)</span>
 
-<div class="viewcode-block" id="Transaction.deserialize"><a class="viewcode-back" href="../../index.html#solana.transaction.Transaction.deserialize">[docs]</a>    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="Transaction.deserialize"><a class="viewcode-back" href="../../solana.html#solana.transaction.Transaction.deserialize">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">deserialize</span><span class="p">(</span><span class="n">raw_transaction</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Transaction</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Parse a wire transaction into a Transaction object.</span>
 
@@ -373,7 +373,7 @@
             <span class="n">offset</span> <span class="o">+=</span> <span class="n">SIG_LENGTH</span>
         <span class="k">return</span> <span class="n">Transaction</span><span class="o">.</span><span class="n">populate</span><span class="p">(</span><span class="n">Message</span><span class="o">.</span><span class="n">deserialize</span><span class="p">(</span><span class="n">raw_transaction</span><span class="p">[</span><span class="n">offset</span><span class="p">:]),</span> <span class="n">signatures</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Transaction.populate"><a class="viewcode-back" href="../../index.html#solana.transaction.Transaction.populate">[docs]</a>    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="Transaction.populate"><a class="viewcode-back" href="../../solana.html#solana.transaction.Transaction.populate">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">populate</span><span class="p">(</span><span class="n">message</span><span class="p">:</span> <span class="n">Message</span><span class="p">,</span> <span class="n">signatures</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">bytes</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Transaction</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Populate Transaction object from message and signatures.</span>
 
@@ -432,6 +432,12 @@
 
 
 <h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../solana.html">Solana</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api.html">API Client</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api.html#module-solana.rpc.providers.base">RPC Providers</a></li>
+</ul>
 
 <div class="relations">
 <h3>Related Topics</h3>

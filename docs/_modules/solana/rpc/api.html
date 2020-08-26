@@ -32,7 +32,7 @@
           <div class="body" role="main">
             
   <h1>Source code for solana.rpc.api</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;Client to interact with the Solana JSON RPC Endpoint.&quot;&quot;&quot;</span>
+<span></span><span class="sd">&quot;&quot;&quot;API client to interact with the Solana JSON RPC Endpoint.&quot;&quot;&quot;</span>
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
 
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
@@ -45,23 +45,25 @@
 <span class="kn">from</span> <span class="nn">solana.transaction</span> <span class="kn">import</span> <span class="n">Transaction</span>
 
 <span class="kn">from</span> <span class="nn">.providers</span> <span class="kn">import</span> <span class="n">http</span>
-<span class="kn">from</span> <span class="nn">.rpc_types</span> <span class="kn">import</span> <span class="n">RPCMethod</span><span class="p">,</span> <span class="n">RPCResponse</span>
+<span class="kn">from</span> <span class="nn">.types</span> <span class="kn">import</span> <span class="n">RPCMethod</span><span class="p">,</span> <span class="n">RPCResponse</span>
 
 <span class="c1"># Client types</span>
 <span class="n">HTTP</span> <span class="o">=</span> <span class="s2">&quot;http&quot;</span>
 <span class="n">WEBSOCKET</span> <span class="o">=</span> <span class="s2">&quot;ws&quot;</span>
 
 
-<div class="viewcode-block" id="Client"><a class="viewcode-back" href="../../../index.html#solana.rpc.api.Client">[docs]</a><span class="k">class</span> <span class="nc">Client</span><span class="p">:</span>  <span class="c1"># pylint: disable=too-many-public-methods</span>
-    <span class="sd">&quot;&quot;&quot;Client interact with the Solana RPC API.&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="Client"><a class="viewcode-back" href="../../../api.html#solana.rpc.api.Client">[docs]</a><span class="k">class</span> <span class="nc">Client</span><span class="p">:</span>  <span class="c1"># pylint: disable=too-many-public-methods</span>
+    <span class="sd">&quot;&quot;&quot;Client class.&quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="Client.__init__"><a class="viewcode-back" href="../../../index.html#solana.rpc.api.Client.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">endpoint</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">client_type</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="Client.__init__"><a class="viewcode-back" href="../../../api.html#solana.rpc.api.Client.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">endpoint</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">client_type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">HTTP</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Init API client.</span>
 
 <span class="sd">        :param endpoint: URL to the fullnode JSON RPC endpoint</span>
-<span class="sd">        :param client_type: Type of RPC client</span>
-<span class="sd">            - &quot;http&quot; for HTTP endpoint</span>
-<span class="sd">            - &quot;ws&quot; for webscoket endpoint</span>
+<span class="sd">        :param client_type: Type of RPC client:</span>
+
+<span class="sd">            - `solana.rpc.api.HTTP` or &quot;http&quot; to specify for HTTP client.</span>
+
+<span class="sd">            - `solana.rpc.api.WEBSOCKET` or &quot;ws&quot; to specify for webscoket client.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">client_type</span> <span class="o">==</span> <span class="n">WEBSOCKET</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_type</span> <span class="o">=</span> <span class="n">WEBSOCKET</span>
@@ -71,7 +73,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">_type</span> <span class="o">=</span> <span class="n">HTTP</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_provider</span> <span class="o">=</span> <span class="n">http</span><span class="o">.</span><span class="n">HTTPProvider</span><span class="p">(</span><span class="n">endpoint</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Client.is_connected"><a class="viewcode-back" href="../../../index.html#solana.rpc.api.Client.is_connected">[docs]</a>    <span class="k">def</span> <span class="nf">is_connected</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<div class="viewcode-block" id="Client.is_connected"><a class="viewcode-back" href="../../../api.html#solana.rpc.api.Client.is_connected">[docs]</a>    <span class="k">def</span> <span class="nf">is_connected</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Health check.</span>
 
 <span class="sd">        &gt;&gt;&gt; solana_client = Client(&quot;http://localhost:8899&quot;)</span>
@@ -80,7 +82,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_provider</span><span class="o">.</span><span class="n">is_connected</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="Client.get_balance"><a class="viewcode-back" href="../../../index.html#solana.rpc.api.Client.get_balance">[docs]</a>    <span class="k">def</span> <span class="nf">get_balance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pubkey</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">PublicKey</span><span class="p">,</span> <span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">RPCResponse</span><span class="p">:</span>
+<div class="viewcode-block" id="Client.get_balance"><a class="viewcode-back" href="../../../api.html#solana.rpc.api.Client.get_balance">[docs]</a>    <span class="k">def</span> <span class="nf">get_balance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pubkey</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">PublicKey</span><span class="p">,</span> <span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">RPCResponse</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Returns the balance of the account of provided Pubkey.</span>
 
 <span class="sd">        :param pubkey: Pubkey of account to query, as base-58 encoded string or PublicKey object.</span>
@@ -92,7 +94,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_provider</span><span class="o">.</span><span class="n">make_request</span><span class="p">(</span><span class="n">RPCMethod</span><span class="p">(</span><span class="s2">&quot;getBalance&quot;</span><span class="p">),</span> <span class="nb">str</span><span class="p">(</span><span class="n">pubkey</span><span class="p">))</span></div>
 
-<div class="viewcode-block" id="Client.get_block_commitment"><a class="viewcode-back" href="../../../index.html#solana.rpc.api.Client.get_block_commitment">[docs]</a>    <span class="k">def</span> <span class="nf">get_block_commitment</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">slot</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RPCResponse</span><span class="p">:</span>
+<div class="viewcode-block" id="Client.get_block_commitment"><a class="viewcode-back" href="../../../api.html#solana.rpc.api.Client.get_block_commitment">[docs]</a>    <span class="k">def</span> <span class="nf">get_block_commitment</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">slot</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RPCResponse</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Fetch the commitment for particular block.</span>
 
 <span class="sd">        :param slot: Block, identified by Slot.</span>
@@ -137,7 +139,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_provider</span><span class="o">.</span><span class="n">make_request</span><span class="p">(</span><span class="n">RPCMethod</span><span class="p">(</span><span class="s2">&quot;getBlockCommitment&quot;</span><span class="p">),</span> <span class="n">slot</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Client.get_block_time"><a class="viewcode-back" href="../../../index.html#solana.rpc.api.Client.get_block_time">[docs]</a>    <span class="k">def</span> <span class="nf">get_block_time</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">slot</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RPCResponse</span><span class="p">:</span>
+<div class="viewcode-block" id="Client.get_block_time"><a class="viewcode-back" href="../../../api.html#solana.rpc.api.Client.get_block_time">[docs]</a>    <span class="k">def</span> <span class="nf">get_block_time</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">slot</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RPCResponse</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Fetch the estimated production time of a block.</span>
 
 <span class="sd">        :param slot: Block, identified by Slot</span>
@@ -148,7 +150,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_provider</span><span class="o">.</span><span class="n">make_request</span><span class="p">(</span><span class="n">RPCMethod</span><span class="p">(</span><span class="s2">&quot;getBlockTime&quot;</span><span class="p">),</span> <span class="n">slot</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Client.get_cluster_nodes"><a class="viewcode-back" href="../../../index.html#solana.rpc.api.Client.get_cluster_nodes">[docs]</a>    <span class="k">def</span> <span class="nf">get_cluster_nodes</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RPCResponse</span><span class="p">:</span>
+<div class="viewcode-block" id="Client.get_cluster_nodes"><a class="viewcode-back" href="../../../api.html#solana.rpc.api.Client.get_cluster_nodes">[docs]</a>    <span class="k">def</span> <span class="nf">get_cluster_nodes</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RPCResponse</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Returns information about all the nodes participating in the cluster.</span>
 
 <span class="sd">        &gt;&gt;&gt; solana_client = Client(&quot;http://localhost:8899&quot;)</span>
@@ -163,7 +165,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_provider</span><span class="o">.</span><span class="n">make_request</span><span class="p">(</span><span class="n">RPCMethod</span><span class="p">(</span><span class="s2">&quot;getClusterNodes&quot;</span><span class="p">))</span></div>
 
-<div class="viewcode-block" id="Client.get_confirmed_block"><a class="viewcode-back" href="../../../index.html#solana.rpc.api.Client.get_confirmed_block">[docs]</a>    <span class="k">def</span> <span class="nf">get_confirmed_block</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">slot</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">encoding</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;json&quot;</span><span class="p">,)</span> <span class="o">-&gt;</span> <span class="n">RPCResponse</span><span class="p">:</span>
+<div class="viewcode-block" id="Client.get_confirmed_block"><a class="viewcode-back" href="../../../api.html#solana.rpc.api.Client.get_confirmed_block">[docs]</a>    <span class="k">def</span> <span class="nf">get_confirmed_block</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">slot</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">encoding</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;json&quot;</span><span class="p">,)</span> <span class="o">-&gt;</span> <span class="n">RPCResponse</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Returns identity and transaction information about a confirmed block in the ledger.</span>
 
 <span class="sd">        :param slot: start_slot, as u64 integer.</span>
@@ -215,7 +217,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>  <span class="c1"># noqa: E501 # pylint: disable=line-too-long</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_provider</span><span class="o">.</span><span class="n">make_request</span><span class="p">(</span><span class="n">RPCMethod</span><span class="p">(</span><span class="s2">&quot;getConfirmedBlock&quot;</span><span class="p">),</span> <span class="n">slot</span><span class="p">,</span> <span class="n">encoding</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Client.get_confirmed_blocks"><a class="viewcode-back" href="../../../index.html#solana.rpc.api.Client.get_confirmed_blocks">[docs]</a>    <span class="k">def</span> <span class="nf">get_confirmed_blocks</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start_slot</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">end_slot</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RPCResponse</span><span class="p">:</span>
+<div class="viewcode-block" id="Client.get_confirmed_blocks"><a class="viewcode-back" href="../../../api.html#solana.rpc.api.Client.get_confirmed_blocks">[docs]</a>    <span class="k">def</span> <span class="nf">get_confirmed_blocks</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start_slot</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">end_slot</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RPCResponse</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Returns a list of confirmed blocks.</span>
 
 <span class="sd">        :param start_slot: start_slot, as u64 integer.</span>
@@ -230,7 +232,7 @@
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_provider</span><span class="o">.</span><span class="n">make_request</span><span class="p">(</span><span class="n">RPCMethod</span><span class="p">(</span><span class="s2">&quot;getConfirmedBlocks&quot;</span><span class="p">),</span> <span class="n">start_slot</span><span class="p">,</span> <span class="n">end_slot</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_provider</span><span class="o">.</span><span class="n">make_request</span><span class="p">(</span><span class="n">RPCMethod</span><span class="p">(</span><span class="s2">&quot;getConfirmedBlocks&quot;</span><span class="p">),</span> <span class="n">start_slot</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Client.get_confirmed_signature_for_address2"><a class="viewcode-back" href="../../../index.html#solana.rpc.api.Client.get_confirmed_signature_for_address2">[docs]</a>    <span class="k">def</span> <span class="nf">get_confirmed_signature_for_address2</span><span class="p">(</span>
+<div class="viewcode-block" id="Client.get_confirmed_signature_for_address2"><a class="viewcode-back" href="../../../api.html#solana.rpc.api.Client.get_confirmed_signature_for_address2">[docs]</a>    <span class="k">def</span> <span class="nf">get_confirmed_signature_for_address2</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">account</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Account</span><span class="p">,</span> <span class="n">PublicKey</span><span class="p">],</span> <span class="n">before</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">limit</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RPCResponse</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Returns confirmed signatures for transactions involving an address.</span>
@@ -265,7 +267,7 @@
 
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_provider</span><span class="o">.</span><span class="n">make_request</span><span class="p">(</span><span class="n">RPCMethod</span><span class="p">(</span><span class="s2">&quot;getConfirmedSignaturesForAddress2&quot;</span><span class="p">),</span> <span class="n">account</span><span class="p">,</span> <span class="n">opts</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Client.get_confirmed_transaction"><a class="viewcode-back" href="../../../index.html#solana.rpc.api.Client.get_confirmed_transaction">[docs]</a>    <span class="k">def</span> <span class="nf">get_confirmed_transaction</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tx_sig</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">encoding</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;json&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RPCResponse</span><span class="p">:</span>
+<div class="viewcode-block" id="Client.get_confirmed_transaction"><a class="viewcode-back" href="../../../api.html#solana.rpc.api.Client.get_confirmed_transaction">[docs]</a>    <span class="k">def</span> <span class="nf">get_confirmed_transaction</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tx_sig</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">encoding</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;json&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RPCResponse</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Returns transaction details for a confirmed transaction.</span>
 
 <span class="sd">        :param tx_sig: Transaction signature as base-58 encoded string N encoding attempts to use program-specific</span>
@@ -298,7 +300,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>  <span class="c1"># noqa: E501 # pylint: disable=line-too-long</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_provider</span><span class="o">.</span><span class="n">make_request</span><span class="p">(</span><span class="n">RPCMethod</span><span class="p">(</span><span class="s2">&quot;getConfirmedTransaction&quot;</span><span class="p">),</span> <span class="n">tx_sig</span><span class="p">,</span> <span class="n">encoding</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Client.get_epoch_info"><a class="viewcode-back" href="../../../index.html#solana.rpc.api.Client.get_epoch_info">[docs]</a>    <span class="k">def</span> <span class="nf">get_epoch_info</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RPCResponse</span><span class="p">:</span>
+<div class="viewcode-block" id="Client.get_epoch_info"><a class="viewcode-back" href="../../../api.html#solana.rpc.api.Client.get_epoch_info">[docs]</a>    <span class="k">def</span> <span class="nf">get_epoch_info</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RPCResponse</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Returns information about the current epoch.</span>
 
 <span class="sd">        &gt;&gt;&gt; solana_client = Client(&quot;http://localhost:8899&quot;)</span>
@@ -313,7 +315,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_provider</span><span class="o">.</span><span class="n">make_request</span><span class="p">(</span><span class="n">RPCMethod</span><span class="p">(</span><span class="s2">&quot;getEpochInfo&quot;</span><span class="p">))</span></div>
 
-<div class="viewcode-block" id="Client.get_epoch_schedule"><a class="viewcode-back" href="../../../index.html#solana.rpc.api.Client.get_epoch_schedule">[docs]</a>    <span class="k">def</span> <span class="nf">get_epoch_schedule</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RPCResponse</span><span class="p">:</span>
+<div class="viewcode-block" id="Client.get_epoch_schedule"><a class="viewcode-back" href="../../../api.html#solana.rpc.api.Client.get_epoch_schedule">[docs]</a>    <span class="k">def</span> <span class="nf">get_epoch_schedule</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RPCResponse</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Returns epoch schedule information from this cluster&#39;s genesis config.</span>
 
 <span class="sd">        &gt;&gt;&gt; solana_client = Client(&quot;http://localhost:8899&quot;)</span>
@@ -328,7 +330,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_provider</span><span class="o">.</span><span class="n">make_request</span><span class="p">(</span><span class="n">RPCMethod</span><span class="p">(</span><span class="s2">&quot;getEpochSchedule&quot;</span><span class="p">))</span></div>
 
-<div class="viewcode-block" id="Client.get_fee_calculator_for_blockhash"><a class="viewcode-back" href="../../../index.html#solana.rpc.api.Client.get_fee_calculator_for_blockhash">[docs]</a>    <span class="k">def</span> <span class="nf">get_fee_calculator_for_blockhash</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">blockhash</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Blockhash</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">RPCResponse</span><span class="p">:</span>
+<div class="viewcode-block" id="Client.get_fee_calculator_for_blockhash"><a class="viewcode-back" href="../../../api.html#solana.rpc.api.Client.get_fee_calculator_for_blockhash">[docs]</a>    <span class="k">def</span> <span class="nf">get_fee_calculator_for_blockhash</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">blockhash</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Blockhash</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">RPCResponse</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Returns the fee calculator associated with the query blockhash, or null if the blockhash has expired.</span>
 
 <span class="sd">        :param blockhash: Blockhash to query as a Base58 encoded string</span>
@@ -342,7 +344,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>  <span class="c1"># noqa: E501 # pylint: disable=line-too-long</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_provider</span><span class="o">.</span><span class="n">make_request</span><span class="p">(</span><span class="n">RPCMethod</span><span class="p">(</span><span class="s2">&quot;getFeeCalculatorForBlockhash&quot;</span><span class="p">),</span> <span class="n">blockhash</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Client.get_fee_rate_governor"><a class="viewcode-back" href="../../../index.html#solana.rpc.api.Client.get_fee_rate_governor">[docs]</a>    <span class="k">def</span> <span class="nf">get_fee_rate_governor</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RPCResponse</span><span class="p">:</span>
+<div class="viewcode-block" id="Client.get_fee_rate_governor"><a class="viewcode-back" href="../../../api.html#solana.rpc.api.Client.get_fee_rate_governor">[docs]</a>    <span class="k">def</span> <span class="nf">get_fee_rate_governor</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RPCResponse</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Returns the fee rate governor information from the root bank.</span>
 
 <span class="sd">        &gt;&gt;&gt; solana_client = Client(&quot;http://localhost:8899&quot;)</span>
@@ -358,7 +360,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_provider</span><span class="o">.</span><span class="n">make_request</span><span class="p">(</span><span class="n">RPCMethod</span><span class="p">(</span><span class="s2">&quot;getFeeRateGovernor&quot;</span><span class="p">))</span></div>
 
-<div class="viewcode-block" id="Client.get_fees"><a class="viewcode-back" href="../../../index.html#solana.rpc.api.Client.get_fees">[docs]</a>    <span class="k">def</span> <span class="nf">get_fees</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RPCResponse</span><span class="p">:</span>
+<div class="viewcode-block" id="Client.get_fees"><a class="viewcode-back" href="../../../api.html#solana.rpc.api.Client.get_fees">[docs]</a>    <span class="k">def</span> <span class="nf">get_fees</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RPCResponse</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Returns a recent block hash from the ledger, a fee schedule and the last slot the blockhash will be valid.</span>
 
 <span class="sd">        &gt;&gt;&gt; solana_client = Client(&quot;http://localhost:8899&quot;)</span>
@@ -372,7 +374,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_provider</span><span class="o">.</span><span class="n">make_request</span><span class="p">(</span><span class="n">RPCMethod</span><span class="p">(</span><span class="s2">&quot;getFees&quot;</span><span class="p">))</span></div>
 
-<div class="viewcode-block" id="Client.get_first_available_block"><a class="viewcode-back" href="../../../index.html#solana.rpc.api.Client.get_first_available_block">[docs]</a>    <span class="k">def</span> <span class="nf">get_first_available_block</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RPCResponse</span><span class="p">:</span>
+<div class="viewcode-block" id="Client.get_first_available_block"><a class="viewcode-back" href="../../../api.html#solana.rpc.api.Client.get_first_available_block">[docs]</a>    <span class="k">def</span> <span class="nf">get_first_available_block</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RPCResponse</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Returns the slot of the lowest confirmed block that has not been purged from the ledger.</span>
 
 <span class="sd">        &gt;&gt;&gt; solana_client = Client(&quot;http://localhost:8899&quot;)</span>
@@ -381,7 +383,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_provider</span><span class="o">.</span><span class="n">make_request</span><span class="p">(</span><span class="n">RPCMethod</span><span class="p">(</span><span class="s2">&quot;getFirstAvailableBlock&quot;</span><span class="p">))</span></div>
 
-<div class="viewcode-block" id="Client.get_genesis_hash"><a class="viewcode-back" href="../../../index.html#solana.rpc.api.Client.get_genesis_hash">[docs]</a>    <span class="k">def</span> <span class="nf">get_genesis_hash</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RPCResponse</span><span class="p">:</span>
+<div class="viewcode-block" id="Client.get_genesis_hash"><a class="viewcode-back" href="../../../api.html#solana.rpc.api.Client.get_genesis_hash">[docs]</a>    <span class="k">def</span> <span class="nf">get_genesis_hash</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RPCResponse</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Returns the genesis hash.</span>
 
 <span class="sd">        &gt;&gt;&gt; solana_client = Client(&quot;http://localhost:8899&quot;)</span>
@@ -392,7 +394,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_provider</span><span class="o">.</span><span class="n">make_request</span><span class="p">(</span><span class="n">RPCMethod</span><span class="p">(</span><span class="s2">&quot;getGenesisHash&quot;</span><span class="p">))</span></div>
 
-<div class="viewcode-block" id="Client.get_identity"><a class="viewcode-back" href="../../../index.html#solana.rpc.api.Client.get_identity">[docs]</a>    <span class="k">def</span> <span class="nf">get_identity</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RPCResponse</span><span class="p">:</span>
+<div class="viewcode-block" id="Client.get_identity"><a class="viewcode-back" href="../../../api.html#solana.rpc.api.Client.get_identity">[docs]</a>    <span class="k">def</span> <span class="nf">get_identity</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RPCResponse</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Returns the identity pubkey for the current node.</span>
 
 <span class="sd">        &gt;&gt;&gt; solana_client = Client(&quot;http://localhost:8899&quot;)</span>
@@ -403,7 +405,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_provider</span><span class="o">.</span><span class="n">make_request</span><span class="p">(</span><span class="n">RPCMethod</span><span class="p">(</span><span class="s2">&quot;getIdentity&quot;</span><span class="p">))</span></div>
 
-<div class="viewcode-block" id="Client.get_inflation_governor"><a class="viewcode-back" href="../../../index.html#solana.rpc.api.Client.get_inflation_governor">[docs]</a>    <span class="k">def</span> <span class="nf">get_inflation_governor</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RPCResponse</span><span class="p">:</span>
+<div class="viewcode-block" id="Client.get_inflation_governor"><a class="viewcode-back" href="../../../api.html#solana.rpc.api.Client.get_inflation_governor">[docs]</a>    <span class="k">def</span> <span class="nf">get_inflation_governor</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RPCResponse</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Returns the current inflation governor.</span>
 
 <span class="sd">        &gt;&gt;&gt; solana_client = Client(&quot;http://localhost:8899&quot;)</span>
@@ -418,7 +420,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_provider</span><span class="o">.</span><span class="n">make_request</span><span class="p">(</span><span class="n">RPCMethod</span><span class="p">(</span><span class="s2">&quot;getInflationGovernor&quot;</span><span class="p">))</span></div>
 
-<div class="viewcode-block" id="Client.get_inflation_rate"><a class="viewcode-back" href="../../../index.html#solana.rpc.api.Client.get_inflation_rate">[docs]</a>    <span class="k">def</span> <span class="nf">get_inflation_rate</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RPCResponse</span><span class="p">:</span>
+<div class="viewcode-block" id="Client.get_inflation_rate"><a class="viewcode-back" href="../../../api.html#solana.rpc.api.Client.get_inflation_rate">[docs]</a>    <span class="k">def</span> <span class="nf">get_inflation_rate</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RPCResponse</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Returns the specific inflation values for the current epoch.</span>
 
 <span class="sd">        &gt;&gt;&gt; solana_client = Client(&quot;http://localhost:8899&quot;)</span>
@@ -432,7 +434,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_provider</span><span class="o">.</span><span class="n">make_request</span><span class="p">(</span><span class="n">RPCMethod</span><span class="p">(</span><span class="s2">&quot;getInflationRate&quot;</span><span class="p">))</span></div>
 
-<div class="viewcode-block" id="Client.get_largest_accounts"><a class="viewcode-back" href="../../../index.html#solana.rpc.api.Client.get_largest_accounts">[docs]</a>    <span class="k">def</span> <span class="nf">get_largest_accounts</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filter_opt</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RPCResponse</span><span class="p">:</span>
+<div class="viewcode-block" id="Client.get_largest_accounts"><a class="viewcode-back" href="../../../api.html#solana.rpc.api.Client.get_largest_accounts">[docs]</a>    <span class="k">def</span> <span class="nf">get_largest_accounts</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filter_opt</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RPCResponse</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Returns the 20 largest accounts, by lamport balance.</span>
 
 <span class="sd">        :param filter_opt: Filter results by account type; currently supported: circulating|nonCirculating.</span>
@@ -486,7 +488,7 @@
         <span class="n">opt</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;filter&quot;</span><span class="p">:</span> <span class="n">filter_opt</span><span class="p">}</span> <span class="k">if</span> <span class="n">filter_opt</span> <span class="k">else</span> <span class="p">{}</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_provider</span><span class="o">.</span><span class="n">make_request</span><span class="p">(</span><span class="n">RPCMethod</span><span class="p">(</span><span class="s2">&quot;getLargestAccounts&quot;</span><span class="p">),</span> <span class="n">opt</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Client.get_leader_schedule"><a class="viewcode-back" href="../../../index.html#solana.rpc.api.Client.get_leader_schedule">[docs]</a>    <span class="k">def</span> <span class="nf">get_leader_schedule</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">epoch</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RPCResponse</span><span class="p">:</span>
+<div class="viewcode-block" id="Client.get_leader_schedule"><a class="viewcode-back" href="../../../api.html#solana.rpc.api.Client.get_leader_schedule">[docs]</a>    <span class="k">def</span> <span class="nf">get_leader_schedule</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">epoch</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RPCResponse</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Returns the leader schedule for an epoch.</span>
 
 <span class="sd">        :param epoch: Fetch the leader schedule for the epoch that corresponds to the provided slot.</span>
@@ -508,7 +510,7 @@
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_provider</span><span class="o">.</span><span class="n">make_request</span><span class="p">(</span><span class="n">RPCMethod</span><span class="p">(</span><span class="s2">&quot;getLeaderSchedule&quot;</span><span class="p">),</span> <span class="n">epoch</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_provider</span><span class="o">.</span><span class="n">make_request</span><span class="p">(</span><span class="n">RPCMethod</span><span class="p">(</span><span class="s2">&quot;getLeaderSchedule&quot;</span><span class="p">))</span></div>
 
-<div class="viewcode-block" id="Client.get_minimum_balance_for_rent_exemption"><a class="viewcode-back" href="../../../index.html#solana.rpc.api.Client.get_minimum_balance_for_rent_exemption">[docs]</a>    <span class="k">def</span> <span class="nf">get_minimum_balance_for_rent_exemption</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">usize</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RPCResponse</span><span class="p">:</span>
+<div class="viewcode-block" id="Client.get_minimum_balance_for_rent_exemption"><a class="viewcode-back" href="../../../api.html#solana.rpc.api.Client.get_minimum_balance_for_rent_exemption">[docs]</a>    <span class="k">def</span> <span class="nf">get_minimum_balance_for_rent_exemption</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">usize</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RPCResponse</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Returns minimum balance required to make account rent exempt.</span>
 
 <span class="sd">        :param usize: Account data length.</span>
@@ -519,7 +521,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_provider</span><span class="o">.</span><span class="n">make_request</span><span class="p">(</span><span class="n">RPCMethod</span><span class="p">(</span><span class="s2">&quot;getMinimumBalanceForRentExemption&quot;</span><span class="p">),</span> <span class="n">usize</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Client.get_program_accounts"><a class="viewcode-back" href="../../../index.html#solana.rpc.api.Client.get_program_accounts">[docs]</a>    <span class="k">def</span> <span class="nf">get_program_accounts</span><span class="p">(</span>
+<div class="viewcode-block" id="Client.get_program_accounts"><a class="viewcode-back" href="../../../api.html#solana.rpc.api.Client.get_program_accounts">[docs]</a>    <span class="k">def</span> <span class="nf">get_program_accounts</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">pubkey</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">PublicKey</span><span class="p">],</span>
         <span class="n">data_size</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -561,7 +563,7 @@
 
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_provider</span><span class="o">.</span><span class="n">make_request</span><span class="p">(</span><span class="n">RPCMethod</span><span class="p">(</span><span class="s2">&quot;getProgramAccounts&quot;</span><span class="p">),</span> <span class="nb">str</span><span class="p">(</span><span class="n">pubkey</span><span class="p">),</span> <span class="n">opts</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Client.get_recent_blockhash"><a class="viewcode-back" href="../../../index.html#solana.rpc.api.Client.get_recent_blockhash">[docs]</a>    <span class="k">def</span> <span class="nf">get_recent_blockhash</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RPCResponse</span><span class="p">:</span>
+<div class="viewcode-block" id="Client.get_recent_blockhash"><a class="viewcode-back" href="../../../api.html#solana.rpc.api.Client.get_recent_blockhash">[docs]</a>    <span class="k">def</span> <span class="nf">get_recent_blockhash</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RPCResponse</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Returns a recent block hash from the ledger.</span>
 
 <span class="sd">        Response also includes a fee schedule that can be used to compute the cost</span>
@@ -577,7 +579,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_provider</span><span class="o">.</span><span class="n">make_request</span><span class="p">(</span><span class="n">RPCMethod</span><span class="p">(</span><span class="s2">&quot;getRecentBlockhash&quot;</span><span class="p">))</span></div>
 
-<div class="viewcode-block" id="Client.get_signature_statuses"><a class="viewcode-back" href="../../../index.html#solana.rpc.api.Client.get_signature_statuses">[docs]</a>    <span class="k">def</span> <span class="nf">get_signature_statuses</span><span class="p">(</span>
+<div class="viewcode-block" id="Client.get_signature_statuses"><a class="viewcode-back" href="../../../api.html#solana.rpc.api.Client.get_signature_statuses">[docs]</a>    <span class="k">def</span> <span class="nf">get_signature_statuses</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">signatures</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">]],</span> <span class="n">search_transaction_history</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RPCResponse</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Returns the statuses of a list of signatures.</span>
@@ -616,7 +618,7 @@
             <span class="n">RPCMethod</span><span class="p">(</span><span class="s2">&quot;getSignatureStatuses&quot;</span><span class="p">),</span> <span class="n">base58_sigs</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;searchTransactionHistory&quot;</span><span class="p">:</span> <span class="n">search_transaction_history</span><span class="p">}</span>
         <span class="p">)</span></div>
 
-<div class="viewcode-block" id="Client.get_slot"><a class="viewcode-back" href="../../../index.html#solana.rpc.api.Client.get_slot">[docs]</a>    <span class="k">def</span> <span class="nf">get_slot</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RPCResponse</span><span class="p">:</span>
+<div class="viewcode-block" id="Client.get_slot"><a class="viewcode-back" href="../../../api.html#solana.rpc.api.Client.get_slot">[docs]</a>    <span class="k">def</span> <span class="nf">get_slot</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RPCResponse</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Returns the current slot the node is processing.</span>
 
 <span class="sd">        &gt;&gt;&gt; solana_client = Client(&quot;http://localhost:8899&quot;)</span>
@@ -625,7 +627,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_provider</span><span class="o">.</span><span class="n">make_request</span><span class="p">(</span><span class="n">RPCMethod</span><span class="p">(</span><span class="s2">&quot;getSlot&quot;</span><span class="p">))</span></div>
 
-<div class="viewcode-block" id="Client.get_slot_leader"><a class="viewcode-back" href="../../../index.html#solana.rpc.api.Client.get_slot_leader">[docs]</a>    <span class="k">def</span> <span class="nf">get_slot_leader</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RPCResponse</span><span class="p">:</span>
+<div class="viewcode-block" id="Client.get_slot_leader"><a class="viewcode-back" href="../../../api.html#solana.rpc.api.Client.get_slot_leader">[docs]</a>    <span class="k">def</span> <span class="nf">get_slot_leader</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RPCResponse</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Returns the current slot leader.</span>
 
 <span class="sd">        &gt;&gt;&gt; solana_client = Client(&quot;http://localhost:8899&quot;)</span>
@@ -636,7 +638,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_provider</span><span class="o">.</span><span class="n">make_request</span><span class="p">(</span><span class="n">RPCMethod</span><span class="p">(</span><span class="s2">&quot;getSlotLeader&quot;</span><span class="p">))</span></div>
 
-<div class="viewcode-block" id="Client.get_stake_activation"><a class="viewcode-back" href="../../../index.html#solana.rpc.api.Client.get_stake_activation">[docs]</a>    <span class="k">def</span> <span class="nf">get_stake_activation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pubkey</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">PublicKey</span><span class="p">,</span> <span class="nb">str</span><span class="p">],</span> <span class="n">epoch</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="Client.get_stake_activation"><a class="viewcode-back" href="../../../api.html#solana.rpc.api.Client.get_stake_activation">[docs]</a>    <span class="k">def</span> <span class="nf">get_stake_activation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pubkey</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">PublicKey</span><span class="p">,</span> <span class="nb">str</span><span class="p">],</span> <span class="n">epoch</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Returns epoch activation information for a stake account.</span>
 
 <span class="sd">        :param pubkey: Pubkey of stake account to query, as base-58 encoded string or PublicKey object</span>
@@ -653,7 +655,7 @@
 
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_provider</span><span class="o">.</span><span class="n">make_request</span><span class="p">(</span><span class="n">RPCMethod</span><span class="p">(</span><span class="s2">&quot;getStakeActivation&quot;</span><span class="p">),</span> <span class="nb">str</span><span class="p">(</span><span class="n">pubkey</span><span class="p">),</span> <span class="n">opts</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Client.get_supply"><a class="viewcode-back" href="../../../index.html#solana.rpc.api.Client.get_supply">[docs]</a>    <span class="k">def</span> <span class="nf">get_supply</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RPCResponse</span><span class="p">:</span>
+<div class="viewcode-block" id="Client.get_supply"><a class="viewcode-back" href="../../../api.html#solana.rpc.api.Client.get_supply">[docs]</a>    <span class="k">def</span> <span class="nf">get_supply</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RPCResponse</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Returns information about the current supply.</span>
 
 <span class="sd">        &gt;&gt;&gt; solana_client = Client(&quot;http://localhost:8899&quot;)</span>
@@ -672,7 +674,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_provider</span><span class="o">.</span><span class="n">make_request</span><span class="p">(</span><span class="n">RPCMethod</span><span class="p">(</span><span class="s2">&quot;getSupply&quot;</span><span class="p">))</span></div>
 
-<div class="viewcode-block" id="Client.get_token_account_balance"><a class="viewcode-back" href="../../../index.html#solana.rpc.api.Client.get_token_account_balance">[docs]</a>    <span class="k">def</span> <span class="nf">get_token_account_balance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pubkey</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">PublicKey</span><span class="p">]):</span>
+<div class="viewcode-block" id="Client.get_token_account_balance"><a class="viewcode-back" href="../../../api.html#solana.rpc.api.Client.get_token_account_balance">[docs]</a>    <span class="k">def</span> <span class="nf">get_token_account_balance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pubkey</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">PublicKey</span><span class="p">]):</span>
         <span class="sd">&quot;&quot;&quot;Returns the token balance of an SPL Token account (UNSTABLE).</span>
 
 <span class="sd">        :param pubkey: Pubkey of Token account to query, as base-58 encoded string or PublicKey object.</span>
@@ -689,23 +691,23 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_provider</span><span class="o">.</span><span class="n">make_request</span><span class="p">(</span><span class="n">RPCMethod</span><span class="p">(</span><span class="s2">&quot;getTokenAccountBalance&quot;</span><span class="p">),</span> <span class="nb">str</span><span class="p">(</span><span class="n">pubkey</span><span class="p">))</span></div>
 
-<div class="viewcode-block" id="Client.get_token_accounts_by_delegate"><a class="viewcode-back" href="../../../index.html#solana.rpc.api.Client.get_token_accounts_by_delegate">[docs]</a>    <span class="k">def</span> <span class="nf">get_token_accounts_by_delegate</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RPCResponse</span><span class="p">:</span>
+<div class="viewcode-block" id="Client.get_token_accounts_by_delegate"><a class="viewcode-back" href="../../../api.html#solana.rpc.api.Client.get_token_accounts_by_delegate">[docs]</a>    <span class="k">def</span> <span class="nf">get_token_accounts_by_delegate</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RPCResponse</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Returns all SPL Token accounts by approved Delegate (UNSTABLE).&quot;&quot;&quot;</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;get_token_account_by_delegate not implemented&quot;</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Client.get_token_accounts_by_owner"><a class="viewcode-back" href="../../../index.html#solana.rpc.api.Client.get_token_accounts_by_owner">[docs]</a>    <span class="k">def</span> <span class="nf">get_token_accounts_by_owner</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RPCResponse</span><span class="p">:</span>
+<div class="viewcode-block" id="Client.get_token_accounts_by_owner"><a class="viewcode-back" href="../../../api.html#solana.rpc.api.Client.get_token_accounts_by_owner">[docs]</a>    <span class="k">def</span> <span class="nf">get_token_accounts_by_owner</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RPCResponse</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Returns all SPL Token accounts by token owner (UNSTABLE).&quot;&quot;&quot;</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;get_token_account_by_owner not implemented&quot;</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Client.get_token_largest_accounts"><a class="viewcode-back" href="../../../index.html#solana.rpc.api.Client.get_token_largest_accounts">[docs]</a>    <span class="k">def</span> <span class="nf">get_token_largest_accounts</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pubkey</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">PublicKey</span><span class="p">,</span> <span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">RPCResponse</span><span class="p">:</span>
+<div class="viewcode-block" id="Client.get_token_largest_accounts"><a class="viewcode-back" href="../../../api.html#solana.rpc.api.Client.get_token_largest_accounts">[docs]</a>    <span class="k">def</span> <span class="nf">get_token_largest_accounts</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pubkey</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">PublicKey</span><span class="p">,</span> <span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">RPCResponse</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Returns the 20 largest accounts of a particular SPL Token type (UNSTABLE).&quot;&quot;&quot;</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;get_token_largbest_accounts not implemented&quot;</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Client.get_token_supply"><a class="viewcode-back" href="../../../index.html#solana.rpc.api.Client.get_token_supply">[docs]</a>    <span class="k">def</span> <span class="nf">get_token_supply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pubkey</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">PublicKey</span><span class="p">,</span> <span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">RPCResponse</span><span class="p">:</span>
+<div class="viewcode-block" id="Client.get_token_supply"><a class="viewcode-back" href="../../../api.html#solana.rpc.api.Client.get_token_supply">[docs]</a>    <span class="k">def</span> <span class="nf">get_token_supply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pubkey</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">PublicKey</span><span class="p">,</span> <span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">RPCResponse</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Returns the total supply of an SPL Token type(UNSTABLE).&quot;&quot;&quot;</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;get_token_supply not implemented&quot;</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Client.get_transaction_count"><a class="viewcode-back" href="../../../index.html#solana.rpc.api.Client.get_transaction_count">[docs]</a>    <span class="k">def</span> <span class="nf">get_transaction_count</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RPCResponse</span><span class="p">:</span>
+<div class="viewcode-block" id="Client.get_transaction_count"><a class="viewcode-back" href="../../../api.html#solana.rpc.api.Client.get_transaction_count">[docs]</a>    <span class="k">def</span> <span class="nf">get_transaction_count</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RPCResponse</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Returns the current Transaction count from the ledger.</span>
 
 <span class="sd">        &gt;&gt;&gt; solana_client = Client(&quot;http://localhost:8899&quot;)</span>
@@ -714,7 +716,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_provider</span><span class="o">.</span><span class="n">make_request</span><span class="p">(</span><span class="n">RPCMethod</span><span class="p">(</span><span class="s2">&quot;getTransactionCount&quot;</span><span class="p">))</span></div>
 
-<div class="viewcode-block" id="Client.get_minimum_ledger_slot"><a class="viewcode-back" href="../../../index.html#solana.rpc.api.Client.get_minimum_ledger_slot">[docs]</a>    <span class="k">def</span> <span class="nf">get_minimum_ledger_slot</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RPCResponse</span><span class="p">:</span>
+<div class="viewcode-block" id="Client.get_minimum_ledger_slot"><a class="viewcode-back" href="../../../api.html#solana.rpc.api.Client.get_minimum_ledger_slot">[docs]</a>    <span class="k">def</span> <span class="nf">get_minimum_ledger_slot</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RPCResponse</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Returns the lowest slot that the node has information about in its ledger.</span>
 
 <span class="sd">        This value may increase over time if the node is configured to purge older ledger data.</span>
@@ -725,7 +727,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_provider</span><span class="o">.</span><span class="n">make_request</span><span class="p">(</span><span class="n">RPCMethod</span><span class="p">(</span><span class="s2">&quot;minimumLedgerSlot&quot;</span><span class="p">))</span></div>
 
-<div class="viewcode-block" id="Client.get_version"><a class="viewcode-back" href="../../../index.html#solana.rpc.api.Client.get_version">[docs]</a>    <span class="k">def</span> <span class="nf">get_version</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RPCResponse</span><span class="p">:</span>
+<div class="viewcode-block" id="Client.get_version"><a class="viewcode-back" href="../../../api.html#solana.rpc.api.Client.get_version">[docs]</a>    <span class="k">def</span> <span class="nf">get_version</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RPCResponse</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Returns the current solana versions running on the node.</span>
 
 <span class="sd">        &gt;&gt;&gt; solana_client = Client(&quot;http://localhost:8899&quot;)</span>
@@ -734,7 +736,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_provider</span><span class="o">.</span><span class="n">make_request</span><span class="p">(</span><span class="n">RPCMethod</span><span class="p">(</span><span class="s2">&quot;getVersion&quot;</span><span class="p">))</span></div>
 
-<div class="viewcode-block" id="Client.request_airdrop"><a class="viewcode-back" href="../../../index.html#solana.rpc.api.Client.request_airdrop">[docs]</a>    <span class="k">def</span> <span class="nf">request_airdrop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pubkey</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">PublicKey</span><span class="p">,</span> <span class="nb">str</span><span class="p">],</span> <span class="n">lamports</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RPCResponse</span><span class="p">:</span>
+<div class="viewcode-block" id="Client.request_airdrop"><a class="viewcode-back" href="../../../api.html#solana.rpc.api.Client.request_airdrop">[docs]</a>    <span class="k">def</span> <span class="nf">request_airdrop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pubkey</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">PublicKey</span><span class="p">,</span> <span class="nb">str</span><span class="p">],</span> <span class="n">lamports</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RPCResponse</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Requests an airdrop of lamports to a Pubkey.</span>
 
 <span class="sd">        :param pubkey: Pubkey of account to receive lamports, as base-58 encoded string or public key object.</span>
@@ -749,7 +751,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_provider</span><span class="o">.</span><span class="n">make_request</span><span class="p">(</span><span class="n">RPCMethod</span><span class="p">(</span><span class="s2">&quot;requestAirdrop&quot;</span><span class="p">),</span> <span class="nb">str</span><span class="p">(</span><span class="n">pubkey</span><span class="p">),</span> <span class="n">lamports</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Client.send_raw_transaction"><a class="viewcode-back" href="../../../index.html#solana.rpc.api.Client.send_raw_transaction">[docs]</a>    <span class="k">def</span> <span class="nf">send_raw_transaction</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">txn</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">bytes</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="n">Transaction</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">RPCResponse</span><span class="p">:</span>
+<div class="viewcode-block" id="Client.send_raw_transaction"><a class="viewcode-back" href="../../../api.html#solana.rpc.api.Client.send_raw_transaction">[docs]</a>    <span class="k">def</span> <span class="nf">send_raw_transaction</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">txn</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">bytes</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="n">Transaction</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">RPCResponse</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Send a transaction that has already been signed and serialized into the wire format.</span>
 
 <span class="sd">        :param txn: Fully-signed Transaction object, a fully sign transaction in wire format,</span>
@@ -772,7 +774,7 @@
 
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_provider</span><span class="o">.</span><span class="n">make_request</span><span class="p">(</span><span class="n">RPCMethod</span><span class="p">(</span><span class="s2">&quot;sendTransaction&quot;</span><span class="p">),</span> <span class="n">wire_format</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Client.send_transaction"><a class="viewcode-back" href="../../../index.html#solana.rpc.api.Client.send_transaction">[docs]</a>    <span class="k">def</span> <span class="nf">send_transaction</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">txn</span><span class="p">:</span> <span class="n">Transaction</span><span class="p">,</span> <span class="o">*</span><span class="n">signers</span><span class="p">:</span> <span class="n">Account</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RPCResponse</span><span class="p">:</span>
+<div class="viewcode-block" id="Client.send_transaction"><a class="viewcode-back" href="../../../api.html#solana.rpc.api.Client.send_transaction">[docs]</a>    <span class="k">def</span> <span class="nf">send_transaction</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">txn</span><span class="p">:</span> <span class="n">Transaction</span><span class="p">,</span> <span class="o">*</span><span class="n">signers</span><span class="p">:</span> <span class="n">Account</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RPCResponse</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Send a transaction.</span>
 
 <span class="sd">        :param txn: Transaction object.</span>
@@ -802,7 +804,7 @@
         <span class="n">wire_format</span> <span class="o">=</span> <span class="n">b58encode</span><span class="p">(</span><span class="n">txn</span><span class="o">.</span><span class="n">serialize</span><span class="p">())</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_provider</span><span class="o">.</span><span class="n">make_request</span><span class="p">(</span><span class="n">RPCMethod</span><span class="p">(</span><span class="s2">&quot;sendTransaction&quot;</span><span class="p">),</span> <span class="n">wire_format</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Client.simulate_transaction"><a class="viewcode-back" href="../../../index.html#solana.rpc.api.Client.simulate_transaction">[docs]</a>    <span class="k">def</span> <span class="nf">simulate_transaction</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">txn</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">bytes</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="n">Transaction</span><span class="p">],</span> <span class="n">signer_verify</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RPCResponse</span><span class="p">:</span>
+<div class="viewcode-block" id="Client.simulate_transaction"><a class="viewcode-back" href="../../../api.html#solana.rpc.api.Client.simulate_transaction">[docs]</a>    <span class="k">def</span> <span class="nf">simulate_transaction</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">txn</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">bytes</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="n">Transaction</span><span class="p">],</span> <span class="n">signer_verify</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RPCResponse</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Simulate sending a transaction.</span>
 
 <span class="sd">        :param txn: a Transaction object, a transaction in wire format, or a transaction as base-58 encoded string</span>
@@ -833,7 +835,7 @@
             <span class="n">wire_format</span> <span class="o">=</span> <span class="n">txn</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_provider</span><span class="o">.</span><span class="n">make_request</span><span class="p">(</span><span class="n">RPCMethod</span><span class="p">(</span><span class="s2">&quot;simulateTransaction&quot;</span><span class="p">),</span> <span class="n">wire_format</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;sigVerify&quot;</span><span class="p">:</span> <span class="n">signer_verify</span><span class="p">})</span></div>
 
-<div class="viewcode-block" id="Client.set_log_filter"><a class="viewcode-back" href="../../../index.html#solana.rpc.api.Client.set_log_filter">[docs]</a>    <span class="k">def</span> <span class="nf">set_log_filter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">log_filter</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RPCResponse</span><span class="p">:</span>
+<div class="viewcode-block" id="Client.set_log_filter"><a class="viewcode-back" href="../../../api.html#solana.rpc.api.Client.set_log_filter">[docs]</a>    <span class="k">def</span> <span class="nf">set_log_filter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">log_filter</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RPCResponse</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Sets the log filter on the validator.</span>
 
 <span class="sd">        :param log_filter: The new log filter to use.</span>
@@ -844,7 +846,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_provider</span><span class="o">.</span><span class="n">make_request</span><span class="p">(</span><span class="n">RPCMethod</span><span class="p">(</span><span class="s2">&quot;setLogFilter&quot;</span><span class="p">),</span> <span class="n">log_filter</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Client.validator_exit"><a class="viewcode-back" href="../../../index.html#solana.rpc.api.Client.validator_exit">[docs]</a>    <span class="k">def</span> <span class="nf">validator_exit</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RPCResponse</span><span class="p">:</span>
+<div class="viewcode-block" id="Client.validator_exit"><a class="viewcode-back" href="../../../api.html#solana.rpc.api.Client.validator_exit">[docs]</a>    <span class="k">def</span> <span class="nf">validator_exit</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RPCResponse</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Request to have the validator exit.</span>
 
 <span class="sd">        Validator must have booted with RPC exit enabled (`--enable-rpc-exit` parameter).</span>
@@ -872,6 +874,12 @@
 
 
 <h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../solana.html">Solana</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api.html">API Client</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api.html#module-solana.rpc.providers.base">RPC Providers</a></li>
+</ul>
 
 <div class="relations">
 <h3>Related Topics</h3>

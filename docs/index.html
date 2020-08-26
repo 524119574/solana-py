@@ -37,13 +37,21 @@
 <p>Solana.py is the Python API for interfacing with the <a class="reference external" href="https://docs.solana.com/apps/jsonrpc-api/">Solana JSON RPC</a>.</p>
 <div class="section" id="installation">
 <h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>pip3 install ...
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>pip install solana
 </pre></div>
 </div>
 </div>
 <div class="section" id="usage">
 <h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
+<p>General usage:</p>
 <div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">solana</span>
+</pre></div>
+</div>
+<p>API Client:</p>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">solana.rpc.api</span> <span class="kn">import</span> <span class="n">HTTP</span><span class="p">,</span> <span class="n">WEBSOCKET</span><span class="p">,</span> <span class="n">Client</span>
+
+<span class="n">http_client</span> <span class="o">=</span> <span class="n">Client</span><span class="p">(</span><span class="n">endpoint</span><span class="o">=</span><span class="s2">&quot;https://devnet.solana.com&quot;</span><span class="p">,</span> <span class="n">client_type</span><span class="o">=</span><span class="n">HTTP</span><span class="p">)</span>
+<span class="n">websocket_client</span> <span class="o">=</span> <span class="n">Client</span><span class="p">(</span><span class="n">endpoint</span><span class="o">=</span><span class="s2">&quot;ws://localhost:8900&quot;</span><span class="p">,</span> <span class="n">client_type</span><span class="o">=</span><span class="n">WEBSOCKET</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>

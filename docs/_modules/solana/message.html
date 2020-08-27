@@ -41,7 +41,8 @@
 
 <span class="kn">from</span> <span class="nn">solana.blockhash</span> <span class="kn">import</span> <span class="n">Blockhash</span>
 <span class="kn">from</span> <span class="nn">solana.publickey</span> <span class="kn">import</span> <span class="n">PublicKey</span>
-<span class="kn">from</span> <span class="nn">solana.utils</span> <span class="kn">import</span> <span class="n">helpers</span><span class="p">,</span> <span class="n">shortvec_encoding</span> <span class="k">as</span> <span class="n">shortvec</span>
+<span class="kn">from</span> <span class="nn">solana.utils</span> <span class="kn">import</span> <span class="n">helpers</span>
+<span class="kn">from</span> <span class="nn">solana.utils</span> <span class="kn">import</span> <span class="n">shortvec_encoding</span> <span class="k">as</span> <span class="n">shortvec</span>
 
 
 <div class="viewcode-block" id="CompiledInstruction"><a class="viewcode-back" href="../../solana.html#solana.message.CompiledInstruction">[docs]</a><span class="k">class</span> <span class="nc">CompiledInstruction</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
@@ -238,7 +239,10 @@
 
         <span class="k">return</span> <span class="n">Message</span><span class="p">(</span>
             <span class="n">MessageArgs</span><span class="p">(</span>
-                <span class="n">header</span><span class="o">=</span><span class="n">header</span><span class="p">,</span> <span class="n">account_keys</span><span class="o">=</span><span class="n">account_keys</span><span class="p">,</span> <span class="n">recent_blockhash</span><span class="o">=</span><span class="n">recent_blockhash</span><span class="p">,</span> <span class="n">instructions</span><span class="o">=</span><span class="n">instructions</span><span class="p">,</span>
+                <span class="n">header</span><span class="o">=</span><span class="n">header</span><span class="p">,</span>
+                <span class="n">account_keys</span><span class="o">=</span><span class="n">account_keys</span><span class="p">,</span>
+                <span class="n">recent_blockhash</span><span class="o">=</span><span class="n">recent_blockhash</span><span class="p">,</span>
+                <span class="n">instructions</span><span class="o">=</span><span class="n">instructions</span><span class="p">,</span>
             <span class="p">)</span>
         <span class="p">)</span></div></div>
 </pre></div>

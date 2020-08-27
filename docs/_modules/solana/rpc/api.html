@@ -47,31 +47,13 @@
 <span class="kn">from</span> <span class="nn">.providers</span> <span class="kn">import</span> <span class="n">http</span>
 <span class="kn">from</span> <span class="nn">.types</span> <span class="kn">import</span> <span class="n">RPCMethod</span><span class="p">,</span> <span class="n">RPCResponse</span>
 
-<span class="c1"># Client types</span>
-<span class="n">HTTP</span> <span class="o">=</span> <span class="s2">&quot;http&quot;</span>
-<span class="n">WEBSOCKET</span> <span class="o">=</span> <span class="s2">&quot;ws&quot;</span>
-
 
 <div class="viewcode-block" id="Client"><a class="viewcode-back" href="../../../api.html#solana.rpc.api.Client">[docs]</a><span class="k">class</span> <span class="nc">Client</span><span class="p">:</span>  <span class="c1"># pylint: disable=too-many-public-methods</span>
     <span class="sd">&quot;&quot;&quot;Client class.&quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="Client.__init__"><a class="viewcode-back" href="../../../api.html#solana.rpc.api.Client.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">endpoint</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">client_type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">HTTP</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Init API client.</span>
-
-<span class="sd">        :param endpoint: URL to the fullnode JSON RPC endpoint</span>
-<span class="sd">        :param client_type: Type of RPC client:</span>
-
-<span class="sd">            - `solana.rpc.api.HTTP` or &quot;http&quot; to specify for HTTP client.</span>
-
-<span class="sd">            - `solana.rpc.api.WEBSOCKET` or &quot;ws&quot; to specify for webscoket client.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="n">client_type</span> <span class="o">==</span> <span class="n">WEBSOCKET</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_type</span> <span class="o">=</span> <span class="n">WEBSOCKET</span>
-            <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;websocket RPC is currently not supported&quot;</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="c1"># Default to http provider, if no endpoint type is provided.</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_type</span> <span class="o">=</span> <span class="n">HTTP</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_provider</span> <span class="o">=</span> <span class="n">http</span><span class="o">.</span><span class="n">HTTPProvider</span><span class="p">(</span><span class="n">endpoint</span><span class="p">)</span></div>
+<div class="viewcode-block" id="Client.__init__"><a class="viewcode-back" href="../../../api.html#solana.rpc.api.Client.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">endpoint</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Init API client.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_provider</span> <span class="o">=</span> <span class="n">http</span><span class="o">.</span><span class="n">HTTPProvider</span><span class="p">(</span><span class="n">endpoint</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Client.is_connected"><a class="viewcode-back" href="../../../api.html#solana.rpc.api.Client.is_connected">[docs]</a>    <span class="k">def</span> <span class="nf">is_connected</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Health check.</span>
@@ -165,7 +147,11 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_provider</span><span class="o">.</span><span class="n">make_request</span><span class="p">(</span><span class="n">RPCMethod</span><span class="p">(</span><span class="s2">&quot;getClusterNodes&quot;</span><span class="p">))</span></div>
 
-<div class="viewcode-block" id="Client.get_confirmed_block"><a class="viewcode-back" href="../../../api.html#solana.rpc.api.Client.get_confirmed_block">[docs]</a>    <span class="k">def</span> <span class="nf">get_confirmed_block</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">slot</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">encoding</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;json&quot;</span><span class="p">,)</span> <span class="o">-&gt;</span> <span class="n">RPCResponse</span><span class="p">:</span>
+<div class="viewcode-block" id="Client.get_confirmed_block"><a class="viewcode-back" href="../../../api.html#solana.rpc.api.Client.get_confirmed_block">[docs]</a>    <span class="k">def</span> <span class="nf">get_confirmed_block</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">slot</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">encoding</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;json&quot;</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RPCResponse</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Returns identity and transaction information about a confirmed block in the ledger.</span>
 
 <span class="sd">        :param slot: start_slot, as u64 integer.</span>

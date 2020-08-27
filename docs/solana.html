@@ -282,7 +282,7 @@ followed by a compact-array of instructions.</p>
 <p>Library to interface with Solana public keys.</p>
 <dl class="py class">
 <dt id="solana.publickey.PublicKey">
-<em class="property">class </em><code class="sig-prename descclassname">solana.publickey.</code><code class="sig-name descname">PublicKey</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">value</span><span class="p">:</span> <span class="n">Union<span class="p">[</span>bytearray<span class="p">, </span>bytes<span class="p">, </span>int<span class="p">, </span>str<span class="p">]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/solana/publickey.html#PublicKey"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#solana.publickey.PublicKey" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">solana.publickey.</code><code class="sig-name descname">PublicKey</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">value</span><span class="p">:</span> <span class="n">Union<span class="p">[</span>bytearray<span class="p">, </span>bytes<span class="p">, </span>int<span class="p">, </span>str<span class="p">, </span>List<span class="p">[</span>int<span class="p">]</span><span class="p">]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/solana/publickey.html#PublicKey"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#solana.publickey.PublicKey" title="Permalink to this definition">¶</a></dt>
 <dd><p>The public key of a keypair.</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># An arbitary public key:</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pubkey</span> <span class="o">=</span> <span class="n">PublicKey</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
@@ -512,6 +512,12 @@ be filled in later by calling <cite>addSigner()</cite> with the matching <cite>A
 <dt id="solana.transaction.Transaction.signature">
 <code class="sig-name descname">signature</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; Optional<span class="p">[</span>bytes<span class="p">]</span><a class="reference internal" href="_modules/solana/transaction.html#Transaction.signature"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#solana.transaction.Transaction.signature" title="Permalink to this definition">¶</a></dt>
 <dd><p>The first (payer) Transaction signature.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="solana.transaction.Transaction.verify_signatures">
+<code class="sig-name descname">verify_signatures</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; bool<a class="reference internal" href="_modules/solana/transaction.html#Transaction.verify_signatures"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#solana.transaction.Transaction.verify_signatures" title="Permalink to this definition">¶</a></dt>
+<dd><p>Verify signatures of a complete, signed Transaction.</p>
 </dd></dl>
 
 </dd></dl>
